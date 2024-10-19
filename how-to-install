@@ -10,43 +10,37 @@ mkdir -p /home/k8s/wp
 cd /home/k8s/wp
 
 # git init
-# git remote add kube https://github.com/zafims/k8s-wordpress.git
-# git pull kube master
+# git remote add wp https://github.com/zafims/k8s-wordpress.git
+# git pull https://github.com/zafims/k8s-wordpress.git
 
-
-----> Step 1: Go to the Kubernetes directory
-# cd /home/k8s/wp
-
-----> Step 2: Preparing the Deployment File for MySQL
-# kubectl apply -f mysql-deployment.yaml
-
-----> Step 3: Preparing the Deployment File for WordPress
+----> Step 1: Preparing the Deployment File for WordPress
 # nano wordpress-deployment.yaml
 
 Specify IP
   externalIPs:
   - 10.76.87.233
 
+----> Step 2: Installation Steps
+# kubectl apply -f mysql-deployment.yaml
 # kubectl apply -f  wordpress-deployment.yaml
 
-----> Step 4: Installation Steps
 
-# kubectl apply -f wp
-
-//----> Step 5: Deploy secrets
-// # echo "zafimsPqS96" | base64
-// MYSQL_ROOT_PASSWORD=zafimsPqS96
-// kubectl create -f mysql-deployment.yaml
-// kubectl create -f wordpress-deployment.yaml
-
-
-
-----> Step 5: Verify Services and Install WordPress
+----> Step 3: Verify Services and Install WordPress
 # kubectl get service
 # kubectl get pv
 
 
+//----> Step 00: Deploy secrets
+// # echo "zafimsPqS96" | base64
+// MYSQL_ROOT_PASSWORD=zafimsPqS96
+
+
+
+
+
+
+
 Verify Services and Install WordPress
 
-Step 10: Access the WordPress application in browser.
+Step 10: Access the WordPress application in browser.   142.171.91.203:32160
 http://<master/worker instance public Ip address>:32160
