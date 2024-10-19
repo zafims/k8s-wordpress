@@ -1,17 +1,17 @@
 
 -------------------------------- Install Wordpress --------------------------
 
-### Install GIt
+---> Install Git
 sudo apt-get install git-all
 
 
-### make a directory
+---> make a directory
 mkdir -p /home/k8s/wp
 cd /home/k8s/wp
 
-git init
-git remote add kube https://github.com/zafims/k8s-wordpress.git
-git pull kube master
+# git init
+# git remote add kube https://github.com/zafims/k8s-wordpress.git
+# git pull kube master
 
 
 ----> Step 1: Go to the Kubernetes directory
