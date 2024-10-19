@@ -1,6 +1,156 @@
 
 -------------------------------- Install Wordpress --------------------------
 
+mkdir wordpress
+cd wordpress
+
+# nano wordpress-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: mysql-service
+        - name: WORDPRESS_DB_USER
+          value: root
+        - name: WORDPRESS_DB_PASSWORD
+          value: Password123@#@!
+        - name: WORDPRESS_DB_NAME
+          value: wordpress_db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+spec:
+  selector:
+    app: wordpress
+  ports:
+    - protocol: TCP
+      port: 8087
+      targetPort: 80
+  type: LoadBalancer
+
+
+
+# nano mysql-deployment.yaml
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:latest
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: Password123@#@!
+        - name: MYSQL_DATABASE
+          value: wordpress_db
+
+
+
+
+
+# nano persistent-volume-claim.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+
+
+
+
+kubectl apply -f wordpress-deployment.yaml 
+kubectl apply -f mysql-deployment.yaml 
+kubectl apply -f persistent-volume-claim.yaml
+
+
+
+http://external_ip:8087
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---> Install Git
 sudo apt-get install git-all
 
@@ -28,8 +178,10 @@ spec:
   - 142.171.91.203
 
 ----> Step 2: Installation Steps
+# kubectl apply -f mysql-secret.yaml
 # kubectl apply -f mysql-deployment.yaml
 # kubectl apply -f  wordpress-deployment.yaml
+
 
 
 ----> Step 3: Verify Services and Install WordPress
