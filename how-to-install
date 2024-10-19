@@ -6,46 +6,47 @@ sudo apt-get install git-all
 
 
 ### make a directory
-mkdir -p /home/ubuntu/Kubernetes 
-cd /home/ubuntu/Kubernetes 
+mkdir -p /home/k8s/wp
+cd /home/k8s/wp
 
 git init
 git remote add kube https://github.com/zafims/k8s-wordpress.git
 git pull kube master
 
 
-#### Step 9.1: Go to the Kubernetes directory
-cd /home/ubuntu/Kubernetes
+----> Step 1: Go to the Kubernetes directory
+# cd /home/k8s/wp
 
-### Step 9.2: Deploy persistent volume for MySQL
-kubectl apply -f pvMysql.yml
+----> Step 2: Preparing the Deployment File for MySQL
+# kubectl apply -f mysql-deployment.yaml
 
-### Step 9.3: Deploy persistent volume claim for MySQL
-kubectl apply -f  pvcMysql.yml
+----> Step 3: Preparing the Deployment File for WordPress
+# nano wordpress-deployment.yaml
 
-### Step 9.4: Deploy service for MySQL
-kubectl apply -f mysql-svc.yml
+Specify IP
+  externalIPs:
+  - 10.76.87.233
 
-### Step 9.5: Deploy secrets
----> run this in CLI: echo -n 'zafimsPqS96' | base64
----> nano secret.yml
+# kubectl apply -f  wordpress-deployment.yaml
 
-kubectl apply -f  secret.yml
+----> Step 4: Installation Steps
 
-### Step 9.6: Deploy Deployment of MySQL
-kubectl apply -f  mysql.yml
+# kubectl apply -f wp
 
-### Step 9.7: Deploy persistent volume for WordPress
-kubectl apply -f  pvWordpress.yml
+//----> Step 5: Deploy secrets
+// # echo "zafimsPqS96" | base64
+// MYSQL_ROOT_PASSWORD=zafimsPqS96
+// kubectl create -f mysql-deployment.yaml
+// kubectl create -f wordpress-deployment.yaml
 
-### Step 9.8: Deploy persistent volume claim for WordPress
-kubectl apply -f  pvcWordpress.yml
 
-### Step 9.9: Deploy service for WordPress
-kubectl apply -f wordpress-svc.yml
 
-### Step 9.10: Deploy Deployment of WordPress
-kubectl apply -f  wordpress.yml
+----> Step 5: Verify Services and Install WordPress
+# kubectl get service
+# kubectl get pv
+
+
+Verify Services and Install WordPress
 
 Step 10: Access the WordPress application in browser.
-http://<master/worker instance public Ip address>:30050
+http://<master/worker instance public Ip address>:32160
