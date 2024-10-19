@@ -1,1 +1,1 @@
-Go to How to install for instructions
+Go to how-to-install for instructions
