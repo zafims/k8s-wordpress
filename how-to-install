@@ -16,9 +16,16 @@ cd /home/k8s/wp
 ----> Step 1: Preparing the Deployment File for WordPress
 # nano wordpress-deployment.yaml
 
-Specify IP
+----> Specify IP and Port
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: wordpress
+    tier: frontend
+  type: LoadBalancer
   externalIPs:
-  - 10.76.87.233
+  - 142.171.91.203
 
 ----> Step 2: Installation Steps
 # kubectl apply -f mysql-deployment.yaml
